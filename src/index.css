@@ -14,6 +14,14 @@ body {
   align-items: center;
 }
 
+.main-wrapper {
+  /* width: 100%; */
+  display: flex;
+  gap: 10em;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .words-wrapper {
   padding: 1em;
   display: flex;
@@ -28,6 +36,8 @@ body {
   }
 
   input {
+    width: 100%;
+    padding: .5rem;
     font-size: large;
     border: none;
     border-bottom: 1px solid;
