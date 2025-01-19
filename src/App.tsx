@@ -79,7 +79,7 @@ const App = () => {
 				<div className="instructions-button">
 					<button
 						type="button"
-						onMouseOver={(e) => setInstructionHover(true)}
+						onMouseOver={() => setInstructionHover(true)}
 						onMouseLeave={() => setInstructionHover(false)}
 					>
 						i
