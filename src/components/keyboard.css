@@ -1,0 +1,51 @@
+.letters {
+    /* padding-inline: 25%; */
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+    padding-inline: 25%;
+}
+
+.letter {
+    width: clamp(2rem, 5vw, 3rem);
+    height: clamp(2rem, 5vw, 3rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    text-transform: uppercase;
+    padding: .5rem;
+    /* border: 1px  solid; */
+    border: none;
+    background-color: #eee;
+    border-radius: .5vw;
+    animation: popout 2s linear;
+
+    &.active {
+        background-color: hsl(203, 92%, 75%);
+        color: hsl(0, 100%, 100%);
+    }
+
+    &:hover {
+        background-color: hsl(203, 92%, 85%);
+    }
+}
+
+@keyframes popout {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (width <=500px) {
+    .letters {
+        padding-inline: 0;
+    }
+}

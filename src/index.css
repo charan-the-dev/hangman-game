@@ -1,61 +1,193 @@
+:root {
+  --font-size: clamp(1.5rem, 5vw, 2.5rem);
+}
+
 *,
 *::before,
 *::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* border: 1px solid; */
 }
 
 body {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
-.main-wrapper {
-  /* width: 100%; */
+.main-game-area {
+  width: 100%;
   display: flex;
-  gap: 10em;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.words-wrapper {
-  padding: 1em;
-  display: flex;
-  gap: 2em;
+  gap: 3rem;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  /* background-color: gray; */
+  padding-inline: min(10rem, 20%);
 
-  #guess-word {
-    font-size: larger;
-    
-  }
-
-  input {
+  section {
     width: 100%;
-    padding: .5rem;
-    font-size: large;
-    border: none;
-    border-bottom: 1px solid;
-    outline: none;
-  }
-
-  .guess-area {
-    display: flex;
-    gap: 1em;
-    font-size: x-large;
-  }
-
-  .guess-letter {
-    width: 1em;
-    text-align: center;
-    border: none;
-    border-bottom: 1px solid;
-    text-transform: uppercase;
   }
 }
 
+.letters-area {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.word-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .display-letter {
+    font-size: var(--font-size);
+    border-bottom: 3px solid;
+    margin-right: 1rem;
+    text-transform: uppercase;
+    text-align: center;
+    width: 2.5rem;
+    animation: popout 2s linear;
+
+    span.hidden {
+      visibility: hidden;
+    }
+
+    span.in-correct {
+      color: red;
+    }
+  }
+}
+
+.restart-game {
+  position: absolute;
+  height: 100vh;
+  top: 0;
+  left: 0rem;
+  padding: 4rem 2rem;
+  animation: slidein .25s linear;
+
+  &.hidden {
+    /* display: none; */
+    visibility: hidden;
+    animation: slideout .25s linear;
+  }
+
+  &.lost-bgc {
+    background-color: hsl(0, 100%, 90%);
+  }
+
+  &.win-bgc {
+    background-color: hsl(120, 73%, 80%);
+  }
+}
+
+.game-status {
+
+  .game-over {
+    font-size: clamp(2rem, 4vw, 4rem);
+  }
+
+  .message {
+    margin-bottom: 3rem;
+  }
+
+  .win {
+    color: green;
+  }
+
+  .lost {
+    color: red;
+  }
+
+  .word {
+    font-size: clamp(1.5rem, 2vw, 3rem);
+    text-align: center;
+    margin-block: 1rem;
+    font-weight: bold;
+    letter-spacing: .25ch;
+  }
+}
+
+.play-again {
+  margin-top: 40%;
+  margin-left: 50%;
+
+  button {
+    padding: .5rem clamp(1rem, 2vw, 2rem);
+    background-color: hsl(0, 100%, 0%);
+    border-radius: .25vw;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: none;
+
+    &:hover {
+      background-color: #fff;
+      color: #000;
+      transition: .25s linear;
+      cursor: pointer;
+    }
+  }
+}
+
+.instructions-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  button {
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    font-style: italic;
+    font-size: clamp(1.1rem, .75vw, 2rem);
+    border: 1px solid;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: .5s linear;
+
+    &:hover {
+      background-color: black;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes popout {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slidein {
+  from {
+    translate: -100%;
+  }
+
+  to {
+    translate: 0;
+  }
+}
+
+@keyframes slideout {
+  from {
+    translate: 0;
+  }
+
+  to {
+    translate: -100%;
+  }
+}

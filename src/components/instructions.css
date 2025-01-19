@@ -1,0 +1,34 @@
+.instructions-container {
+    position: absolute;
+    top: 2rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    margin: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    color: #333;
+    font-family: Arial, sans-serif;
+    animation: popout .5s linear;
+}
+
+.instructions-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.instructions-list {
+    text-align: left;
+    line-height: 1.6;
+}
+
+.instructions-item {
+    margin-bottom: 0.5rem;
+}
+

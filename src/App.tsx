@@ -1,88 +1,96 @@
-import { useEffect, useRef, useState } from "react";
-import Stickman from "./Stickman";
+import { useEffect, useState } from 'react';
+import getRandomWord from './utils/uilts'
+import KeyBoard from './components/KeyBoard';
+import Word from './components/Word';
+import Stickman from './components/Stickman';
+import HangmanInstructions from './components/Instructions';
 
 const App = () => {
-	const words = ["Pirate", "Rocket", "Dragon", "Circus", "Vampire", "Submarine", "Robot", "Wizard", "Bicycle", "Castle"];
-	const [word] = useState(() => words[Math.floor((Math.random() * words.length))]);
-	const [wordMapping] = useState(() => {
-		let map: { [key: string]: number[] } = {};
-		word.split('').map((letter, i) => {
-			letter = letter.toLowerCase();
-			if (!map[letter]) {
-				map[letter] = [];
-			}
-			map[letter].push(i);
-		});
+	const [word, setWord] = useState(getRandomWord());
+	const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
-		return map;
-	})
-	const [guessedWord, setGuessedWord] = useState(new Array(word.length).fill(""))
-	const [guess, setGuess] = useState("");
-	// const [guessCount, setGuessCount] = useState(0);
-	const [incorrectGuessCount, setIncorrectGuessCount] = useState(0);
+	const hasWon = word.split("").every(letter => guessedLetters.includes(letter.toLowerCase()));
+	const incorrectGuesses = guessedLetters.filter(letter => !word.includes(letter)).length;
+	const hasLost = incorrectGuesses >= 6;
 
-	useEffect(() => {
-	}, [guess, guessedWord]);
+	const [instructionHover, setInstructionHover] = useState(false);
 
-	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-		if (e.key === 'Enter') {
-			handleEnter();
-		} else if (!e.key.match(/a-zA-Z/)) {
+	function addToGuessedLetters(letter: string) {
+		if (guessedLetters.includes(letter)) {
 			return;
 		}
+
+		setGuessedLetters([...guessedLetters, letter]);
 	}
 
-	function handleEnter() {
-		if (guessedWord.join("") === word) {
-			console.log("Wow you guessed the word");
-		}
-
-		guess.split('').map(letter => {
-			if (wordMapping[letter] !== undefined) {
-				const indices = wordMapping[letter];
-				const newGuessedWord = [...guessedWord];
-				indices.map(i => (
-					newGuessedWord[i] = letter
-				))
-				setGuessedWord(newGuessedWord);
-			} else {
-				setIncorrectGuessCount(prev => prev + 1);
-			}
-		})
-		// setGuessCount(guessCount - incorrectGuessCount);
-
-		setGuess("");
-		console.log(guessedWord);
+	function restartGame() {
+		setWord(getRandomWord());
+		setGuessedLetters([]);
 	}
+
+	useEffect(() => {
+		// console.log(guessedLetters);
+		// console.log(hasLost);
+		// console.log(hasWon);
+	}, [guessedLetters])
 
 	return (
 		<>
-			<main className="main-wrapper">
-				<div className='words-wrapper'>
-					{/* <div id="guess-word">{word}</div> */}
-					<div className="guess-area">
-						{guessedWord.map((char, i) => (
-							<span key={i} className="guess-letter">
-								{char}
-							</span>
-						))}
-					</div>
-					<input
-						placeholder="Type a character and press enter"
-						type="text"
-						id="guess"
-						value={guess}
-						onChange={(e) => setGuess(e.target.value.toLowerCase())}
-						onKeyDown={handleKeyDown}
-						disabled={incorrectGuessCount >= 10}
-					/>
-					<div className="">Your left over guess counts are: {10 - incorrectGuessCount}</div>
+			<main>
+				<section className='main-game-area'>
+					<Stickman guessCount={incorrectGuesses} />
+					<section className='letters-area'>
+						<Word
+							word={word}
+							guessedLetters={guessedLetters}
+							hasLost={hasLost}
+						/>
+						<KeyBoard
+							addToGuessedLetters={addToGuessedLetters}
+							guessedLetters={guessedLetters}
+							hasLost={hasLost}
+							hasWon={hasWon}
+						/>
+					</section>
+				</section>
+				<section className={`restart-game ${(hasLost || hasWon) ? (hasLost ? "lost-bgc" : "win-bgc") : "hidden"}`}>
+					<section className='game-status'>
+						<h1 className='game-over'>GAME OVER</h1>
+						<div className="message">
+							{hasWon && <h1 className="win">Yehh! You have won the game</h1>}
+							{hasLost && <h1 className='lost'>Oops! You could not guess the word</h1>}
+						</div>
+						<p>The word was</p>
+						<div className="word">{word.toUpperCase()}</div>
+					</section>
+					<section>
+						{
+							(hasWon || hasLost) &&
+							<div className="play-again">
+								<button
+									onClick={restartGame}
+								>
+									Play Again
+								</button>
+							</div>
+						}
+					</section>
+				</section>
+				<div className="instructions-button">
+					<button
+						type="button"
+						onMouseOver={(e) => setInstructionHover(true)}
+						onMouseLeave={() => setInstructionHover(false)}
+					>
+						i
+					</button>
 				</div>
-				{/* <Stickman wrongGuesses={incorrectGuessCount} /> */}
-			</main>
+				{
+					instructionHover && <HangmanInstructions />
+				}
+			</main >
 		</>
 	)
 }
 
 export default App
-
